@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pymongo
+import sys
 
 # Connect to MongoDB
 client = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -22,8 +23,10 @@ def plot_pie_chart(ax, country_name, year):
         ax.axis('off')  # Turn off axis if no data
 
 # Get user input for year and country names
-year = input("Enter the year: ")
-countries = input("Enter up to four country names separated by commas: ").split(",")
+#year = input("Enter the year: ")
+#countries = input("Enter up to four country names separated by commas: ").split(",")
+year = sys.argv[1]
+countries = sys.argc[2]
 
 # Create subplots
 fig, axs = plt.subplots(2, 2, figsize=(10, 10))
@@ -40,4 +43,5 @@ for i in range(4):
 # Add global legend
 fig.legend(['Hydro', 'Solar', 'Biofuel', 'Wind'], loc='upper right')
 plt.tight_layout()
-plt.show()
+#plt.show()
+plt.savefig("graph2")

@@ -1,13 +1,14 @@
 import matplotlib.pyplot as plt
 import pymongo
-
+import sys
 # Connect to MongoDB
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["OurWorld"]
 collection = db["owid-energy-data"]
 
 # Get user input for the country name
-country_name = input("Enter the country name: ")
+#country_name = input("Enter the country name: ")
+country_name = sys.argv[1]
 
 # Query the data for the chosen country
 data = collection.find({"country": country_name})
@@ -50,4 +51,5 @@ plt.ylabel("Consumption (TWh)")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
-plt.show()
+#plt.show()
+plt.savefig("graph1")
