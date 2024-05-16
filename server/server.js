@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const { connect } = require('./database/database');
 const {spawn} = require('child_process');
 const path = require('path');
+const controller = require('./controllers/graph.controller');
+const fs = require('fs');
 
 app.use(cors());
 app.use(morgan('tiny'));
@@ -18,28 +20,104 @@ app.use(express.json());
 // meaningful data graph. querry parameters to be determined, if any. Method: get.
 
 app.get('/', function(req, res) {
-    res.send('Hello World')
+    res.send('Server is up and running.')
 })
 
-app.get('/python_test_route', async function(req, res) {
+app.get('/fossil_fuel', async function(req, res) {
     // get the country
     const country = req.query.country
 
-    // spawn new child process to call the python script
-    const python = await spawn('python', ['graph1.py', country]);
+    // check if the country is entered
+    if(!country) {
+        res.status(400).send({'message': 'missing country parameter.'});
+        return
+    }
+
+    try{
+        python_output = await controller.get_fossil_fuel_image(country);
+        
+        const imagePath = path.resolve(__dirname, python_output.slice(0, -2) + '.png');
+
+        // create new promise and wait for it to end. Await keyword is not enough for some reason.
+        await new Promise((resolve, reject) => {
+            res.sendFile(imagePath, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+
+        // delete the file
+        fs.unlinkSync(imagePath)
+    }catch(e) {
+        res.send({'message': e});
+    }
+
+});
+
+app.get('/sustainable_energy', async function(req, res) {
+    // get the year and countries from parameters
+    const year = req.query.year
+    const countries = req.query.countries
+
+    // checking if the year or countries parameters exists
+    if(!year){
+        res.status(400).send({'message': 'missing year parameter.'});
+        return;
+    }
+    if(!countries){
+        res.status(400).send({'message': 'missing countries parameter.'});
+        return;
+    }
+
+    // formatting/getting the countries
+    const tokens = countries.split(',')
+    if(tokens.length > 4){
+        res.status(400).send({'message': 'too many countries. Please enter up to 4.'});
+        return;
+    }
+
+    // checking year format
+    regex = /^\d{4}$/
+    if(!regex.test(year)){
+        res.status(400).send({'message': 'invalid year format: ' + year});
+        return;
+    }
+
     
-    python.on('close', (code) => {
-        if (code === 0) {
-            const imagePath = path.resolve(__dirname, 'image.png');
-            res.sendFile(imagePath);
-        } else {
-            res.status(500).send({'error': 'Python script execution failed'});
-        }
-    });
-})
+
+    try{
+        python_output = await controller.get_sustainable_energy_image(year, tokens);
+        
+        const imagePath = path.resolve(__dirname, python_output.slice(0, -2) + '.png');
+
+        // create new promise and wait for it to end. Await keyword is not enough for some reason.
+        await new Promise((resolve, reject) => {
+            res.sendFile(imagePath, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+
+        // delete the file
+        fs.unlinkSync(imagePath)
+    }catch(e) {
+        res.send({'message': e});
+    }
+});
+
+app.get('/greenhouse_emisions', async function(req, res) {
+    const year = req.query.year;
+
+});
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
     connect()
     console.log("Server listening on port " + port)
-})
+});

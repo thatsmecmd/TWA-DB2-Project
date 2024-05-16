@@ -11,6 +11,22 @@ collection = db["owid-energy-data"]
 # random number generator
 random = RNG.RNG()
 
+# get the countries from the argument list
+def get_countries():
+    countries = []
+    position = 0
+    for arg in sys.argv:
+        # the argument 0 should be the script name, so we skip it
+        # the argument 1 should be the year, so we skip it also
+        # the next 4 should be the countries, so we add them to the list
+        # anything more than that will be ignored.
+        if (position == 1) or (position == 0) or (position > 5):
+            position += 1
+            continue
+        position += 1
+        countries.append(arg)
+    return countries
+
 # Function to plot pie chart for a country
 def plot_pie_chart(ax, country_name, year):
     data = collection.find_one({"country": country_name, "year": year})
@@ -30,7 +46,7 @@ def plot_pie_chart(ax, country_name, year):
 #year = input("Enter the year: ")
 #countries = input("Enter up to four country names separated by commas: ").split(",")
 year = sys.argv[1]
-countries = sys.argv[2]
+countries = get_countries()
 
 # Create subplots
 fig, axs = plt.subplots(2, 2, figsize=(10, 10))
