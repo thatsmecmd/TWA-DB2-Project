@@ -5,7 +5,8 @@ import RNG
 
 # Connect to MongoDB
 client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["OurWorldInData"]
+#db = client["OurWorldInData"]
+db = client["OurWorld"]
 collection = db["owid-energy-data"]
 
 # random number generator
@@ -13,18 +14,24 @@ random = RNG.RNG()
 
 # get the countries from the argument list
 def get_countries():
-    countries = []
-    position = 0
+    countries = [] # countries list
+    position = 0 # array index while looping
     for arg in sys.argv:
-        # the argument 0 should be the script name, so we skip it
-        # the argument 1 should be the year, so we skip it also
-        # the next 4 should be the countries, so we add them to the list
-        # anything more than that will be ignored.
-        if (position == 1) or (position == 0) or (position > 5):
+        # skip the first two arguments because they are not countries (script name, year)
+        if position == 0 or position ==1:
             position += 1
             continue
+
+        # The next 4 arguments should be the countries, so we add them to the list
+        if position <= 5:
+            countries.append(arg)
+        
+        # Anything more than 5 will be ignored
+        if position > 5:
+            break
+        
         position += 1
-        countries.append(arg)
+
     return countries
 
 # Function to plot pie chart for a country
