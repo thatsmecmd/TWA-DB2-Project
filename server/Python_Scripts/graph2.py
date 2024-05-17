@@ -1,10 +1,15 @@
+from dotenv import load_dotenv
+import os
 import matplotlib.pyplot as plt
 import pymongo
 import sys
 import RNG
 
+# Load environment variables from the .env file
+load_dotenv()
+
 # Connect to MongoDB
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+client = pymongo.MongoClient(os.getenv('DATABASE_CONNECTION_STRING'))
 #db = client["OurWorldInData"]
 db = client["OurWorld"]
 collection = db["owid-energy-data"]
