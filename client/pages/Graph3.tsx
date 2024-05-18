@@ -18,7 +18,7 @@ function Graph3() {
         event.preventDefault()
         if (parseInt(year) > 1700){
             if (type != ""){
-                console.log(year, type)
+                httpReq()
             }else{
                 console.log("failed type")
                 toast.error("incorrect type")
@@ -29,6 +29,28 @@ function Graph3() {
         }
         //window.location.href = "/"
     }
+
+    async function httpReq(){
+        //
+        // TODO / To complete
+        //
+        const url = `http://localhost:8080/greenhouse_emisions?countries=${type}&year=${year}`
+        console.log('year: ', year)
+        try {
+            const statCodes = await fetch(url)
+            const response = await statCodes.json()
+            console.log('response: ', response)
+
+            if (statCodes.status == 400){
+                console.log("Error: ", response.message)
+                toast.error("Error")
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("Server error: ")
+        }
+    }
+
     return (
         <div>
             <form onSubmit={handlSubmit}>
@@ -38,7 +60,6 @@ function Graph3() {
                         type="text"
                         value={year}
                         onChange={handleYearChange}
-                        required
                     />
                 </div>
 

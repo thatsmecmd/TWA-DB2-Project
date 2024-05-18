@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 const cors = require('cors');
 const morgan = require('morgan');
-const { connect } = require('./database/database');
 const {spawn} = require('child_process');
 const path = require('path');
 const controller = require('./controllers/graph.controller');
@@ -118,6 +117,5 @@ app.get('/greenhouse_emisions', async function(req, res) {
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-    connect()
     console.log("Server listening on port " + port)
 });

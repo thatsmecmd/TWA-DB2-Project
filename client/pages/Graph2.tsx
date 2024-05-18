@@ -17,10 +17,9 @@ function Graph2() {
 
     const handlSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (parseInt(year) > 1700){
+        if (parseInt(year) > 1800){
             if (/^[a-zA-Z-]+(?:,[a-zA-Z-]+){0,3}$/.test(country)){
-                console.log(country, year)
-                toast("success")
+                httpReq()
             }else{
             console.log("failed country")
             toast.error("Incorrect country format, Formating is without spacing: Country1,Country2,Country3")
@@ -31,6 +30,26 @@ function Graph2() {
         }
         //window.location.href = "/"
     }
+
+    async function httpReq(){
+        const url = `http://localhost:8080/sustainable_energy?countries=${country}&year=${year}`
+        console.log('year: ', year)
+        console.log('country: ', country)
+        try {
+            const statCodes = await fetch(url)
+            const response = await statCodes.json()
+            console.log('response: ', response)
+
+            if (statCodes.status == 400){
+                console.log("Error: ", response.message)
+                toast.error("Error")
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("Server error: ")
+        }
+    }
+
     return (
         <div>
             <form onSubmit={handlSubmit}>
