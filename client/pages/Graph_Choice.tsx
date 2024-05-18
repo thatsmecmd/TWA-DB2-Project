@@ -11,10 +11,10 @@ function Graph_Choice() {
         window.location.href = "/graph2"
     }
     const handleGraph3 = () => {
-        window.location.href = "/"
+        window.location.href = "/graph3"
     }
     const handleGraph4 = () => {
-        window.location.href = "/"
+        window.location.href = "/graph4"
     }
   return (
     <div>
