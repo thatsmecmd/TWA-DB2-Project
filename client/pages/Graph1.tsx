@@ -3,13 +3,11 @@ import {ToastContainer, toast} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 
 function Graph1() {
-    const [country, setCountry] = useState('');
-    const [img, setImg] = useState('');
-
+    const [country, setCountry] = useState('')
 
     const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCountry(event.target.value);
-    };
+    }
 
     const handlSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -19,23 +17,32 @@ function Graph1() {
             console.log("no country")
             toast.error("No country provided")
         }
-        //window.location.href = "/display_graph"
     }
 
     async function httpReq(){
-        const url = `http://localhost:8080/fossil_fuel?country=${country}`
+        const capCountry = country.charAt(0).toUpperCase() + country.slice(1)
+        const url = `http://localhost:8080/fossil_fuel?country=${capCountry}`
         try {
-            const statCodes = await fetch(url)
-            const response = await statCodes.json()
-
-            if (statCodes.status == 400){
+            const response = await fetch(url)
+            console.log('response: ', response)
+            if (response.status == 400){
                 console.log("no country")
                 toast.error("No country provided")
+                return
             }
 
-            setImg(response)
-            console.log('response: ', response);
+            const blobed = await response.blob()
+            console.log('blobed: ', blobed)
 
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                const base64String = reader.result as string
+                localStorage.setItem("source","graph1")
+                localStorage.setItem("image",base64String)
+                window.location.href = "/display_graph"
+            }
+
+            reader.readAsDataURL(blobed)
         } catch (err) {
             console.log(err)
             toast.error("Server error: ")
@@ -53,8 +60,6 @@ function Graph1() {
                         onChange={handleCountryChange}
                         required
                     />
-
-                    <img src={img} alt="" />
                 </div>
                 <button type='submit'>Generate</button>
             </form>

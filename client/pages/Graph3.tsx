@@ -16,7 +16,7 @@ function Graph3() {
 
     const handlSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        if (parseInt(year) > 1700){
+        if (parseInt(year) > 1900 && parseInt(year) < 2024){
             if (type != ""){
                 httpReq()
             }else{
@@ -31,23 +31,33 @@ function Graph3() {
     }
 
     async function httpReq(){
-        //
-        // TODO / To complete
-        //
-        const url = `http://localhost:8080/greenhouse_emisions?countries=${type}&year=${year}`
-        console.log('year: ', year)
+        const url = `http://localhost:8080/greenhouse_emisions?mode=${type}&year=${year}`
         try {
-            const statCodes = await fetch(url)
-            const response = await statCodes.json()
+            const response = await fetch(url)
             console.log('response: ', response)
 
-            if (statCodes.status == 400){
-                console.log("Error: ", response.message)
-                toast.error("Error")
+            if (response.status == 400){
+                const message = await response.json()
+                console.log('message: ', message);
+                toast.error("Error in response")
+                return
             }
+
+            const blobed = await response.blob()
+            console.log('blobed: ', blobed)
+
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                const base64String = reader.result as string
+                localStorage.setItem("source","graph3")
+                localStorage.setItem("image",base64String)
+                window.location.href = "/display_graph"
+            }
+
+            reader.readAsDataURL(blobed)
         } catch (err) {
             console.log(err)
-            toast.error("Server error: ")
+            toast.error("Server error")
         }
     }
 
@@ -66,10 +76,10 @@ function Graph3() {
                 <div>
                     Type of data
                     <select value={type} onChange={handleDataTypeChange} required>
-                        <option value="" disabled>Select a Country</option>
-                        <option value="emission">emission</option>
-                        <option value="population">population</option>
-                        <option value="GDP">GDP</option>
+                        <option value="" disabled>Select a type</option>
+                        <option value="greenhouse_gas_emissions">Greenhouse Gas Emissions</option>
+                        <option value="population">Population</option>
+                        <option value="gdp">GDP</option>
                     </select>
                 </div>
 
