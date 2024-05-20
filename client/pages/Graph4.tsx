@@ -2,47 +2,32 @@ import React, { useState } from 'react'
 import {ToastContainer, toast} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 
-
-function Graph2() {
-    const [country, setCountry] = useState("")
-    const [year, setYear] = useState("")
-
+function Graph1() {
+    const [country, setCountry] = useState('')
 
     const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCountry(event.target.value);
-    };
-    const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setYear(event.target.value)
     }
 
     const handlSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (parseInt(year) > 1900 && parseInt(year) < 2024){
-            if (/^[a-zA-Z-]+(?:,[a-zA-Z-]+){0,3}$/.test(country)){
-                httpReq()
-            }else{
-            console.log("failed country")
-            toast.error("Incorrect country format, Formating is without spacing: Country1,Country2,Country3")
-            }
+        if (/^[A-Za-z-]+$/.test(country) && country) {
+            httpReq()
         }else{
-            console.log("failed year")
-            toast.error("Incorrect year")
+            console.log("no country")
+            toast.error("No country provided")
         }
-        //window.location.href = "/"
     }
 
     async function httpReq(){
         const capCountry = country.charAt(0).toUpperCase() + country.slice(1)
-        const url = `http://localhost:8080/sustainable_energy?countries=${capCountry}&year=${year}`
-        console.log('year: ', year)
-        console.log('country: ', country)
+        const url = `http://localhost:8080/per_capita_electricity?country=${capCountry}`
         try {
             const response = await fetch(url)
             console.log('response: ', response)
-
             if (response.status == 400){
-                console.log("Error in response")
-                toast.error("Error in response")
+                console.log("no country")
+                toast.error("No country provided")
                 return
             }
 
@@ -52,7 +37,7 @@ function Graph2() {
             const reader = new FileReader()
             reader.onloadend = () => {
                 const base64String = reader.result as string
-                localStorage.setItem("source","graph2")
+                localStorage.setItem("source","graph1")
                 localStorage.setItem("image",base64String)
                 window.location.href = "/display_graph"
             }
@@ -60,7 +45,7 @@ function Graph2() {
             reader.readAsDataURL(blobed)
         } catch (err) {
             console.log(err)
-            toast.error("Server error")
+            toast.error("Server error: ")
         }
     }
 
@@ -68,17 +53,7 @@ function Graph2() {
         <div>
             <form onSubmit={handlSubmit}>
                 <div>
-                    Year
-                    <input
-                        type="text"
-                        value={year}
-                        onChange={handleYearChange}
-                        required
-                    />
-                </div>
-                <br/>
-
-                <div>Country name (up to 4)<br />Seperate by commas ex: Canada,France,Brazil<br />
+                    Country name
                     <input
                         type="text"
                         value={country}
@@ -93,4 +68,4 @@ function Graph2() {
     )
 }
 
-export default Graph2
+export default Graph1

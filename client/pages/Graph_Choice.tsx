@@ -22,32 +22,32 @@ function Graph_Choice() {
         <div>
             <br/>
             <br/>
-            <div>graph 1 name</div>
-            <div><img src="../sample_graphs/graph1.png" alt="graph 1 sample image" style={{width : "200px"}} /></div>
+            <div>Fossil fuel consumption</div>
+            <div><img src="../sample_graphs/graph1.png" alt="graph 1 sample image" style={{width : "200"}} /></div>
             <button onClick={handleGraph1}>Select</button>
         </div>
 
         <div>
             <br/>
             <br/>
-            <div>graph 2 name</div>
-            <div><img src="../sample_graphs/graph2.png" alt="graph 2 sample image" style={{width : "200px"}} /></div>
+            <div>Energy types used per country</div>
+            <div><img src="../sample_graphs/graph2.png" alt="graph 2 sample image" style={{width : "200"}} /></div>
             <button onClick={handleGraph2}>Select</button>
         </div>
 
         <div>
             <br/>
             <br/>
-            <div>graph 3 name</div>
-            <div><img src="../sample_graphs/graph3.png" alt="graph 3 sample image" style={{width : "200px"}} /></div>
+            <div>graph 3 </div>
+            <div><img src="../sample_graphs/graph3.png" alt="graph 3 sample image" style={{width : "200"}} /></div>
             <button onClick={handleGraph3}>Select</button>
         </div>
 
         <div>
             <br/>
             <br/>
-            <div>graph 4 name</div>
-            <div><img src="../sample_graphs/graph4.png" alt="graph 4 sample image" style={{width : "200px"}} /></div>
+            <div>Energy consumption per capita</div>
+            <div><img src="../sample_graphs/graph4.png" alt="graph 4 sample image" style={{width : "200"}} /></div>
             <button onClick={handleGraph4}>Select</button>
         </div>
     </div>
