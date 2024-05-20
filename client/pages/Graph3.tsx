@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import {ToastContainer, toast} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
+import { useNavigate } from "react-router-dom";
 
 function Graph3() {
     const [year, setYear] = useState("")
     const [type, setType] = useState("")
+    const navigate = useNavigate();
 
 
     const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +33,7 @@ function Graph3() {
     }
 
     async function httpReq(){
-        const url = `http://localhost:8080/greenhouse_emisions?mode=${type}&year=${year}`
+        const url = `/greenhouse_emisions?mode=${type}&year=${year}`
         try {
             const response = await fetch(url)
             console.log('response: ', response)
@@ -51,7 +53,8 @@ function Graph3() {
                 const base64String = reader.result as string
                 localStorage.setItem("source","graph3")
                 localStorage.setItem("image",base64String)
-                window.location.href = "/display_graph"
+                //window.location.href = "/display_graph"
+                navigate("/display_graph");
             }
 
             reader.readAsDataURL(blobed)

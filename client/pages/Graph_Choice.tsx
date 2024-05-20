@@ -1,20 +1,28 @@
 //import React from 'react'
+import { useNavigate } from "react-router-dom";
 
 function Graph_Choice() {
+    const navigate = useNavigate();
+    
     const handleBack = () => {
-        window.location.href = "/home"
+        //window.location.href = "/home"
+        navigate("/home");
     }
     const handleGraph1 = () => {
-        window.location.href = "/graph1"
+        //window.location.href = "/graph1"
+        navigate("/graph1");
     }
     const handleGraph2 = () => {
-        window.location.href = "/graph2"
+        //window.location.href = "/graph2"
+        navigate("/graph2");
     }
     const handleGraph3 = () => {
-        window.location.href = "/graph3"
+        //window.location.href = "/graph3"
+        navigate("/graph3");
     }
     const handleGraph4 = () => {
-        window.location.href = "/graph4"
+        //window.location.href = "/graph4"
+        navigate("/graph4");
     }
   return (
     <div>

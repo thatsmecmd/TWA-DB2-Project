@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import {ToastContainer, toast} from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css'
+import { useNavigate } from "react-router-dom";
+
 
 function Graph1() {
     const [country, setCountry] = useState('')
+    const navigate = useNavigate();
 
     const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCountry(event.target.value);
@@ -21,7 +23,7 @@ function Graph1() {
 
     async function httpReq(){
         const capCountry = country.charAt(0).toUpperCase() + country.slice(1)
-        const url = `http://localhost:8080/fossil_fuel?country=${capCountry}`
+        const url = `/fossil_fuel?country=${capCountry}`
         try {
             const response = await fetch(url)
             console.log('response: ', response)
@@ -39,7 +41,8 @@ function Graph1() {
                 const base64String = reader.result as string
                 localStorage.setItem("source","graph1")
                 localStorage.setItem("image",base64String)
-                window.location.href = "/display_graph"
+                //window.location.href = "/display_graph"
+                navigate("/display_graph");
             }
 
             reader.readAsDataURL(blobed)

@@ -1,11 +1,12 @@
 //import React from 'react'
 
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 function Display_Graph() {
     const [graph, setGraph] = useState<string | null>('')
     const [source, setSource] = useState<string | null>('')
-
+    const navigate = useNavigate();
 
 
     const data_source: {[key: string]:string} = {
@@ -24,7 +25,8 @@ function Display_Graph() {
     }, [])
 
     const handleBack = () => {
-        window.location.href = "/graphs"
+        //window.location.href = "/graphs"
+        navigate("/graphs");
     }
 
     const handleDownload = () => {

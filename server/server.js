@@ -1,13 +1,10 @@
 const express = require('express')
 const app = express()
-const cors = require('cors');
 const morgan = require('morgan');
-const {spawn} = require('child_process');
 const path = require('path');
 const controller = require('./controllers/graph.controller');
 const fs = require('fs');
 
-app.use(cors());
 app.use(morgan('tiny'));
 app.use(express.json());
 
@@ -18,9 +15,7 @@ app.use(express.json());
 // Canada and the top 5 countries in terms of greenhouse gas emissions, population or GDP in 2020 and then for the past 10 years. querry parameters: year (int of 4 digits, optional). Method: get.
 // meaningful data graph. querry parameters to be determined, if any. Method: get.
 
-app.get('/', function(req, res) {
-    res.send('Server is up and running.')
-})
+app.use('/', express.static('dist'));
 
 app.get('/fossil_fuel', async function(req, res) {
     // get the country
@@ -35,7 +30,7 @@ app.get('/fossil_fuel', async function(req, res) {
     try{
         python_output = await controller.get_fossil_fuel_image(country);
         
-        const imagePath = path.resolve(__dirname, python_output.slice(0, -2));
+        const imagePath = path.resolve(__dirname, python_output.slice(0, -1));
 
         // create new promise and wait for it to end. Await keyword is not enough for some reason.
         await new Promise((resolve, reject) => {
@@ -90,7 +85,7 @@ app.get('/sustainable_energy', async function(req, res) {
     try{
         python_output = await controller.get_sustainable_energy_image(year, countries);
         
-        const imagePath = path.resolve(__dirname, python_output.slice(0, -2));
+        const imagePath = path.resolve(__dirname, python_output.slice(0, -1));
 
         // create new promise and wait for it to end. Await keyword is not enough for some reason.
         await new Promise((resolve, reject) => {
@@ -126,7 +121,7 @@ app.get('/greenhouse_emisions', async function(req, res) {
 
     try{
         python_output = await controller.run_graph3(mode, year)
-        const imagePath = path.resolve(__dirname, python_output.slice(0, -2));
+        const imagePath = path.resolve(__dirname, python_output.slice(0, -1));
 
         // create new promise and wait for it to end. Await keyword is not enough for some reason.
         await new Promise((resolve, reject) => {
@@ -155,7 +150,7 @@ app.get('/per_capita_electricity', async function (req, res) {
     }
     try{
         python_output = await controller.run_graph4(country)
-        const imagePath = path.resolve(__dirname, python_output.slice(0, -2));
+        const imagePath = path.resolve(__dirname, python_output.slice(0, -1));
 
         // create new promise and wait for it to end. Await keyword is not enough for some reason.
         await new Promise((resolve, reject) => {
