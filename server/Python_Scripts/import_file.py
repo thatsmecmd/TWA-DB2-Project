@@ -1,13 +1,8 @@
-from dotenv import load_dotenv
-import os
 import csv
 from pymongo import MongoClient
 
-# Load environment variables from the .env file
-load_dotenv()
-
 # Connect to MongoDB
-client = MongoClient(os.getenv('DATABASE_CONNECTION_STRING'))
+client = MongoClient('mongodb+srv://TWA-Final-Project:YnDFlJRBHwiNtTi9@twa-final-project.6dcdslr.mongodb.net/')
 db = client['OurWorld']
 energy_collection = db['owid-energy-data']
 countries_collection = db['countries']
